@@ -54,7 +54,10 @@ struct KYCFormView: View {
                     .padding(.vertical, AppTheme.Spacing.lg)
                 }
                 
-                HamburgerMenuView(isMenuOpen: $isMenuOpen)
+                // Menu overlay (only the sliding menu, not the button)
+                if isMenuOpen {
+                    HamburgerMenuOverlay(isMenuOpen: $isMenuOpen)
+                }
             }
             .navigationTitle("")
             .toolbar {
@@ -62,6 +65,18 @@ struct KYCFormView: View {
                     Text("Member KYC Form")
                         .font(AppTheme.Typography.headline)
                         .foregroundColor(AppTheme.Colors.primaryText)
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            isMenuOpen.toggle()
+                        }
+                    }) {
+                        Image(systemName: "line.horizontal.3")
+                            .font(AppTheme.Typography.headline)
+                            .foregroundColor(AppTheme.Colors.primaryText)
+                    }
                 }
             }
         }

@@ -7,122 +7,125 @@
 
 import SwiftUI
 
-struct HamburgerMenuView: View {
+// MARK: - Hamburger Menu Overlay (Sliding Menu Content)
+struct HamburgerMenuOverlay: View {
     @Binding var isMenuOpen: Bool
     @EnvironmentObject var authViewModel: AuthViewModel
     
     var body: some View {
-        VStack {
+        ZStack {
+            // Background overlay
+            Color.black.opacity(0.3)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        isMenuOpen = false
+                    }
+                }
+            
+            // Sliding menu panel
             HStack {
                 Spacer()
                 
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        isMenuOpen.toggle()
-                    }
-                }) {
-                    Image(systemName: "line.horizontal.3")
-                        .font(.title2)
-                        .foregroundColor(.primary)
-                        .padding()
-                }
-            }
-            
-            Spacer()
-        }
-        .overlay(
-            // Menu overlay
-            Group {
-                if isMenuOpen {
-                    Color.black.opacity(0.3)
-                        .ignoresSafeArea()
-                        .onTapGesture {
+                VStack(alignment: .leading, spacing: 0) {
+                    // Menu header with themed styling
+                    HStack {
+                        Text("Menu")
+                            .font(AppTheme.Typography.headline)
+                            .foregroundColor(AppTheme.Colors.primaryText)
+                            .padding(.leading, 20)
+                            .padding(.top, 20)
+                        
+                        Spacer()
+                        
+                        Button(action: {
                             withAnimation(.easeInOut(duration: 0.3)) {
                                 isMenuOpen = false
                             }
+                        }) {
+                            Image(systemName: "xmark")
+                                .font(AppTheme.Typography.headline)
+                                .foregroundColor(AppTheme.Colors.primaryText)
+                                .padding()
                         }
+                    }
+                    .background(AppTheme.Colors.backgroundGradient)
                     
-                    HStack {
-                        Spacer()
+                    Divider()
+                        .background(AppTheme.Colors.primaryText.opacity(0.3))
+                        .padding(.horizontal, 20)
+                    
+                    // User info section with themed styling
+                    if let user = authViewModel.user {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Signed in as:")
+                                .font(AppTheme.Typography.caption)
+                                .foregroundColor(AppTheme.Colors.secondaryText)
+                                .padding(.horizontal, 20)
+                                .padding(.top, 16)
+                            
+                            Text(user.email ?? user.phoneNumber ?? "Unknown User")
+                                .font(AppTheme.Typography.bodySmall)
+                                .fontWeight(.medium)
+                                .foregroundColor(AppTheme.Colors.primaryText)
+                                .padding(.horizontal, 20)
+                        }
+                        .background(Color(UIColor.systemBackground))
                         
-                        VStack(alignment: .leading, spacing: 0) {
-                            HStack {
-                                Text("Menu")
-                                    .font(.headline)
-                                    .padding(.leading, 20)
-                                    .padding(.top, 20)
-                                
-                                Spacer()
-                                
-                                Button(action: {
-                                    withAnimation(.easeInOut(duration: 0.3)) {
-                                        isMenuOpen = false
-                                    }
-                                }) {
-                                    Image(systemName: "xmark")
-                                        .font(.title2)
-                                        .foregroundColor(.primary)
-                                        .padding()
-                                }
-                            }
+                        Divider()
+                            .background(AppTheme.Colors.primaryText.opacity(0.3))
+                            .padding(.horizontal, 20)
+                            .padding(.top, 16)
+                    }
+                    
+                    // Logout button with themed styling
+                    Button(action: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            isMenuOpen = false
+                        }
+                        authViewModel.signOut()
+                    }) {
+                        HStack {
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                                .foregroundColor(AppTheme.Colors.errorColor)
                             
-                            Divider()
-                                .padding(.horizontal, 20)
-                            
-                            if let user = authViewModel.user {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text("Signed in as:")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                        .padding(.horizontal, 20)
-                                        .padding(.top, 16)
-                                    
-                                    Text(user.email ?? user.phoneNumber ?? "Unknown User")
-                                        .font(.subheadline)
-                                        .fontWeight(.medium)
-                                        .padding(.horizontal, 20)
-                                }
-                                
-                                Divider()
-                                    .padding(.horizontal, 20)
-                                    .padding(.top, 16)
-                            }
-                            
-                            Button(action: {
-                                withAnimation(.easeInOut(duration: 0.3)) {
-                                    isMenuOpen = false
-                                }
-                                authViewModel.signOut()
-                            }) {
-                                HStack {
-                                    Image(systemName: "rectangle.portrait.and.arrow.right")
-                                        .foregroundColor(.red)
-                                    
-                                    Text("Logout")
-                                        .foregroundColor(.red)
-                                        .fontWeight(.medium)
-                                    
-                                    Spacer()
-                                }
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 16)
-                            }
+                            Text("Logout")
+                                .foregroundColor(AppTheme.Colors.errorColor)
+                                .font(AppTheme.Typography.bodySmall)
+                                .fontWeight(.medium)
                             
                             Spacer()
                         }
-                        .frame(width: 280)
-                        .background(Color(UIColor.systemBackground))
-                        .clipShape(RoundedRectangle(cornerRadius: 0))
-                        .shadow(radius: 10)
-                        .transition(.move(edge: .trailing))
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 16)
                     }
+                    .background(Color(UIColor.systemBackground))
+                    
+                    Spacer()
                 }
+                .frame(width: 280)
+                .background(Color(UIColor.systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 0))
+                .shadow(color: AppTheme.Shadows.medium, radius: 10)
+                .transition(.move(edge: .trailing))
             }
-        )
+        }
+    }
+}
+
+// MARK: - Legacy HamburgerMenuView (kept for compatibility)
+struct HamburgerMenuView: View {
+    @Binding var isMenuOpen: Bool
+    
+    var body: some View {
+        // This is now just a wrapper that shows the overlay when needed
+        if isMenuOpen {
+            HamburgerMenuOverlay(isMenuOpen: $isMenuOpen)
+        }
     }
 }
 
 #Preview {
-    HamburgerMenuView(isMenuOpen: .constant(true))
+    HamburgerMenuOverlay(isMenuOpen: .constant(true))
         .environmentObject(AuthViewModel())
 }
