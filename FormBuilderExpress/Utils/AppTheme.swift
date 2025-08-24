@@ -66,9 +66,9 @@ struct AppTheme {
         static let bodySmall = Font.system(size: 14, weight: .medium)
         static let caption = Font.system(size: 12, weight: .medium)
         
-        // Button text
-        static let buttonText = Font.system(size: 16, weight: .semibold)
-        static let buttonTextSmall = Font.system(size: 14, weight: .semibold)
+        // Button text - increased for better readability
+        static let buttonText = Font.system(size: 18, weight: .semibold)
+        static let buttonTextSmall = Font.system(size: 16, weight: .semibold)
         
         // Form labels
         static let fieldLabel = Font.system(size: 14, weight: .semibold)
@@ -160,8 +160,8 @@ extension View {
     
     func themedButton(isLoading: Bool = false, style: ButtonStyle = .primary) -> some View {
         self
+            .frame(height: 50) // Set fixed height to 50px
             .frame(maxWidth: .infinity)
-            .padding(.vertical, AppTheme.Spacing.md)
             .background(
                 Group {
                     switch style {
@@ -192,9 +192,9 @@ extension View {
                     case .destructive: return AppTheme.Colors.errorColor.opacity(0.3)
                     }
                 }(),
-                radius: 8,
+                radius: 6, // Slightly reduce shadow radius
                 x: 0,
-                y: 4
+                y: 3 // Reduce shadow offset
             )
             .scaleEffect(isLoading ? 0.95 : 1.0)
             .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isLoading)

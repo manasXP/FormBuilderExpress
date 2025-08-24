@@ -41,7 +41,7 @@ struct KYCFormView: View {
                             .themedCard()
                             .padding(.horizontal, AppTheme.Spacing.lg)
                         }
-                        .padding(.vertical, AppTheme.Spacing.lg)
+                        .padding(.top, AppTheme.Spacing.sm) // Reduced top padding
                         .padding(.bottom, AppTheme.Spacing.xl) // Extra space for footer
                     }
                     

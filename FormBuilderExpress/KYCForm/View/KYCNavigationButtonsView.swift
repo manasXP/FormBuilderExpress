@@ -27,13 +27,12 @@ struct KYCNavigationButtonsView: View {
             Button(action: onPrevious) {
                 HStack(spacing: AppTheme.Spacing.xs) {
                     Image(systemName: "chevron.left")
-                        .font(AppTheme.Typography.buttonTextSmall)
+                        .font(AppTheme.Typography.buttonText)
                     Text("Previous")
-                        .font(AppTheme.Typography.buttonTextSmall)
+                        .font(AppTheme.Typography.buttonText)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, AppTheme.Spacing.md)
-            }
+                            }
             .themedButton(isLoading: viewModel.isLoading, style: .secondary)
             .disabled(viewModel.isLoading)
             
@@ -45,14 +44,13 @@ struct KYCNavigationButtonsView: View {
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     } else {
                         Image(systemName: "checkmark")
-                            .font(AppTheme.Typography.buttonTextSmall)
+                            .font(AppTheme.Typography.buttonText)
                     }
                     Text(viewModel.isLoading ? "Submitting..." : "Submit")
-                        .font(AppTheme.Typography.buttonTextSmall)
+                        .font(AppTheme.Typography.buttonText)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, AppTheme.Spacing.md)
-            }
+                            }
             .themedButton(isLoading: viewModel.isLoading, style: .primary)
             .disabled(viewModel.isLoading)
         }
@@ -63,13 +61,12 @@ struct KYCNavigationButtonsView: View {
             Button(action: onPrevious) {
                 HStack(spacing: AppTheme.Spacing.xs) {
                     Image(systemName: "chevron.left")
-                        .font(AppTheme.Typography.buttonTextSmall)
+                        .font(AppTheme.Typography.buttonText)
                     Text("Previous")
-                        .font(AppTheme.Typography.buttonTextSmall)
+                        .font(AppTheme.Typography.buttonText)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, AppTheme.Spacing.md)
-            }
+                            }
             .themedButton(
                 isLoading: false, 
                 style: viewModel.currentStep == .memberInfo ? .secondary : .primary
@@ -80,13 +77,12 @@ struct KYCNavigationButtonsView: View {
             Button(action: onNext) {
                 HStack(spacing: AppTheme.Spacing.xs) {
                     Text("Next")
-                        .font(AppTheme.Typography.buttonTextSmall)
+                        .font(AppTheme.Typography.buttonText)
                     Image(systemName: "chevron.right")
-                        .font(AppTheme.Typography.buttonTextSmall)
+                        .font(AppTheme.Typography.buttonText)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, AppTheme.Spacing.md)
-            }
+                            }
             .themedButton(
                 isLoading: false,
                 style: viewModel.canProceedToNext() ? .primary : .secondary
