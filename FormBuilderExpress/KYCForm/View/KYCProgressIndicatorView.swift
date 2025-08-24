@@ -46,28 +46,30 @@ struct KYCProgressIndicatorView: View {
                 .animation(.easeInOut(duration: 0.3), value: progressValue)
             
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Step \(stepNumber) of 6")
-                        .font(AppTheme.Typography.caption)
-                        .foregroundColor(AppTheme.Colors.primaryText)
-                        .fontWeight(.semibold)
-                    
-                    Text(stepTitle)
-                        .font(AppTheme.Typography.bodySmall)
-                        .foregroundColor(AppTheme.Colors.secondaryText)
-                }
+                // Left side: Step info
+                Text("Step \(stepNumber) of 6")
+                    .font(AppTheme.Typography.caption)
+                    .foregroundColor(AppTheme.Colors.primaryText)
+                    .fontWeight(.semibold)
                 
                 Spacer()
                 
-                if let lastSaved = lastAutoSaved {
-                    HStack(spacing: AppTheme.Spacing.xs) {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(AppTheme.Colors.successColor)
-                            .font(AppTheme.Typography.caption)
-                        
-                        Text("Saved \(timeAgoSince(lastSaved))")
-                            .font(AppTheme.Typography.caption)
-                            .foregroundColor(AppTheme.Colors.secondaryText)
+                // Right side: Step title and save status in same row
+                HStack(spacing: AppTheme.Spacing.md) {
+                    Text(stepTitle)
+                        .font(AppTheme.Typography.bodySmall)
+                        .foregroundColor(AppTheme.Colors.secondaryText)
+                    
+                    if let lastSaved = lastAutoSaved {
+                        HStack(spacing: AppTheme.Spacing.xs) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(AppTheme.Colors.successColor)
+                                .font(AppTheme.Typography.caption)
+                            
+                            Text("Saved \(timeAgoSince(lastSaved))")
+                                .font(AppTheme.Typography.caption)
+                                .foregroundColor(AppTheme.Colors.secondaryText)
+                        }
                     }
                 }
             }
