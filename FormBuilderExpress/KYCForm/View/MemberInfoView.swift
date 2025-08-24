@@ -18,9 +18,9 @@ struct MemberInfoView: View {
     }
 
     var body: some View {
-        VStack(spacing: AppTheme.Spacing.xl) {
+        VStack(spacing: AppTheme.Spacing.sm) {
             // Personal Information Section
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
                 Text("Personal Information")
                     .font(AppTheme.Typography.headline)
                     .foregroundColor(AppTheme.Colors.primaryText)
@@ -73,7 +73,7 @@ struct MemberInfoView: View {
                     }
                     
                     // Date Picker with themed styling
-                    VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+                    HStack {
                         HStack {
                             Text("Date of Birth")
                                 .font(AppTheme.Typography.fieldLabel)
@@ -83,6 +83,8 @@ struct MemberInfoView: View {
                                 .font(AppTheme.Typography.fieldLabel)
                                 .foregroundColor(AppTheme.Colors.errorColor)
                         }
+                        
+                        Spacer()
                         
                         DatePicker(
                             "",
@@ -123,7 +125,7 @@ struct MemberInfoView: View {
             }
             
             // Contact Information Section
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
                 Text("Contact Information")
                     .font(AppTheme.Typography.headline)
                     .foregroundColor(AppTheme.Colors.primaryText)
@@ -132,7 +134,7 @@ struct MemberInfoView: View {
                         description: "Enter your email and phone number for communication"
                     )
                 
-                VStack(spacing: AppTheme.Spacing.md) {
+                VStack(spacing: AppTheme.Spacing.sm) {
                     ThemedInputField(
                         title: "Email Address",
                         placeholder: "Enter your email address",
