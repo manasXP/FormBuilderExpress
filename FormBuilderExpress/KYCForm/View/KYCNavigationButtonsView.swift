@@ -23,54 +23,76 @@ struct KYCNavigationButtonsView: View {
     }
     
     private var summaryNavigationButtons: some View {
-        HStack {
+        HStack(spacing: AppTheme.Spacing.md) {
             Button(action: onPrevious) {
-                Text("Previous")
-                    .frame(maxWidth: 80)
-                    .padding()
-                    .foregroundColor(.white)
-                    .background(Color.green)
-                    .cornerRadius(8)
+                HStack(spacing: AppTheme.Spacing.xs) {
+                    Image(systemName: "chevron.left")
+                        .font(AppTheme.Typography.buttonTextSmall)
+                    Text("Previous")
+                        .font(AppTheme.Typography.buttonTextSmall)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, AppTheme.Spacing.md)
             }
+            .themedButton(isLoading: viewModel.isLoading, style: .secondary)
             .disabled(viewModel.isLoading)
             
-            Spacer()
-            
             Button(action: onSubmit) {
-                Text("Submit")
-                    .frame(maxWidth: 80)
-                    .padding()
-                    .foregroundColor(.white)
-                    .background(viewModel.isLoading ? Color.gray : Color.green)
-                    .cornerRadius(8)
+                HStack(spacing: AppTheme.Spacing.xs) {
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .scaleEffect(0.8)
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    } else {
+                        Image(systemName: "checkmark")
+                            .font(AppTheme.Typography.buttonTextSmall)
+                    }
+                    Text(viewModel.isLoading ? "Submitting..." : "Submit")
+                        .font(AppTheme.Typography.buttonTextSmall)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, AppTheme.Spacing.md)
             }
+            .themedButton(isLoading: viewModel.isLoading, style: .primary)
             .disabled(viewModel.isLoading)
         }
     }
     
     private var standardNavigationButtons: some View {
-        HStack {
+        HStack(spacing: AppTheme.Spacing.md) {
             Button(action: onPrevious) {
-                Text("Previous")
-                    .frame(maxWidth: 80)
-                    .padding()
-                    .foregroundColor(.white)
-                    .background(viewModel.currentStep == .memberInfo ? Color.gray : Color.green)
-                    .cornerRadius(8)
+                HStack(spacing: AppTheme.Spacing.xs) {
+                    Image(systemName: "chevron.left")
+                        .font(AppTheme.Typography.buttonTextSmall)
+                    Text("Previous")
+                        .font(AppTheme.Typography.buttonTextSmall)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, AppTheme.Spacing.md)
             }
+            .themedButton(
+                isLoading: false, 
+                style: viewModel.currentStep == .memberInfo ? .secondary : .primary
+            )
             .disabled(viewModel.currentStep == .memberInfo)
-            
-            Spacer()
+            .opacity(viewModel.currentStep == .memberInfo ? 0.5 : 1.0)
             
             Button(action: onNext) {
-                Text("Next")
-                    .frame(maxWidth: 80)
-                    .padding()
-                    .foregroundColor(.white)
-                    .background(viewModel.canProceedToNext() ? Color.green : Color.gray)
-                    .cornerRadius(8)
+                HStack(spacing: AppTheme.Spacing.xs) {
+                    Text("Next")
+                        .font(AppTheme.Typography.buttonTextSmall)
+                    Image(systemName: "chevron.right")
+                        .font(AppTheme.Typography.buttonTextSmall)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, AppTheme.Spacing.md)
             }
+            .themedButton(
+                isLoading: false,
+                style: viewModel.canProceedToNext() ? .primary : .secondary
+            )
             .disabled(!viewModel.canProceedToNext())
+            .opacity(viewModel.canProceedToNext() ? 1.0 : 0.6)
         }
     }
 }

@@ -40,31 +40,43 @@ struct KYCFormView: View {
                             }
                             .themedCard()
                             .padding(.horizontal, AppTheme.Spacing.lg)
+                        }
+                        .padding(.vertical, AppTheme.Spacing.lg)
+                        .padding(.bottom, AppTheme.Spacing.xl) // Extra space for footer
+                    }
+                    
+                    // Persistent footer with progress bar and navigation buttons
+                    VStack(spacing: 0) {
+                        Divider()
+                            .background(AppTheme.Colors.primaryText.opacity(0.2))
+                        
+                        VStack(spacing: AppTheme.Spacing.md) {
+                            // Progress indicator
+                            KYCProgressIndicatorView(
+                                currentStep: viewModel.currentStep,
+                                lastAutoSaved: viewModel.lastAutoSaved
+                            )
                             
+                            // Navigation buttons
                             KYCNavigationButtonsView(
                                 onPrevious: tappedPrevious,
                                 onNext: tappedNext,
                                 onSubmit: tappedSubmit
                             )
-                            .padding(.horizontal, AppTheme.Spacing.lg)
                         }
-                        .padding(.vertical, AppTheme.Spacing.lg)
-                        .padding(.bottom, AppTheme.Spacing.xl) // Extra space for progress bar
-                    }
-                    
-                    // Progress bar at bottom
-                    VStack {
-                        Divider()
-                            .background(AppTheme.Colors.primaryText.opacity(0.2))
-                        
-                        KYCProgressIndicatorView(
-                            currentStep: viewModel.currentStep,
-                            lastAutoSaved: viewModel.lastAutoSaved
-                        )
                         .padding(.horizontal, AppTheme.Spacing.lg)
                         .padding(.vertical, AppTheme.Spacing.md)
                     }
-                    .background(AppTheme.Colors.cardBackground)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                AppTheme.Colors.cardBackground.opacity(0.95),
+                                AppTheme.Colors.cardBackground
+                            ]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
                     .overlay(
                         RoundedRectangle(cornerRadius: 0)
                             .stroke(AppTheme.Colors.primaryText.opacity(0.1), lineWidth: 1)

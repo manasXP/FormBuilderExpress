@@ -163,14 +163,35 @@ extension View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, AppTheme.Spacing.md)
             .background(
-                style == .primary ? 
-                AppTheme.Colors.buttonGradient : 
-                LinearGradient(gradient: Gradient(colors: [AppTheme.Colors.errorColor]), startPoint: .leading, endPoint: .trailing)
+                Group {
+                    switch style {
+                    case .primary:
+                        AppTheme.Colors.buttonGradient
+                    case .secondary:
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.gray.opacity(0.6), Color.gray.opacity(0.8)]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    case .destructive:
+                        LinearGradient(
+                            gradient: Gradient(colors: [AppTheme.Colors.errorColor]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    }
+                }
             )
             .foregroundColor(.white)
             .cornerRadius(AppTheme.CornerRadius.medium)
             .shadow(
-                color: style == .primary ? AppTheme.Colors.iconBlue.opacity(0.3) : AppTheme.Colors.errorColor.opacity(0.3),
+                color: {
+                    switch style {
+                    case .primary: return AppTheme.Colors.iconBlue.opacity(0.3)
+                    case .secondary: return Color.gray.opacity(0.3)
+                    case .destructive: return AppTheme.Colors.errorColor.opacity(0.3)
+                    }
+                }(),
                 radius: 8,
                 x: 0,
                 y: 4
