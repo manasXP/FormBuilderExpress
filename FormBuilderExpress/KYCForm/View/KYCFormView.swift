@@ -14,24 +14,56 @@ struct KYCFormView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Form {
-                    KYCProgressIndicatorView(
-                        currentStep: viewModel.currentStep,
-                        lastAutoSaved: viewModel.lastAutoSaved
-                    )
-                    
-                    KYCFormContentView()
-                    
-                    KYCNavigationButtonsView(
-                        onPrevious: tappedPrevious,
-                        onNext: tappedNext,
-                        onSubmit: tappedSubmit
-                    )
+                // Apply themed background
+                AppTheme.Colors.backgroundGradient
+                    .ignoresSafeArea()
+                
+                // Background blur effects
+                Circle()
+                    .fill(Color.white.opacity(0.1))
+                    .frame(width: 300, height: 300)
+                    .blur(radius: 10)
+                    .offset(x: -150, y: -200)
+                
+                Circle()
+                    .fill(Color.blue.opacity(0.1))
+                    .frame(width: 200, height: 200)
+                    .blur(radius: 10)
+                    .offset(x: 150, y: 100)
+                
+                ScrollView {
+                    VStack(spacing: AppTheme.Spacing.lg) {
+                        KYCProgressIndicatorView(
+                            currentStep: viewModel.currentStep,
+                            lastAutoSaved: viewModel.lastAutoSaved
+                        )
+                        
+                        VStack {
+                            KYCFormContentView()
+                        }
+                        .themedCard()
+                        .padding(.horizontal, AppTheme.Spacing.lg)
+                        
+                        KYCNavigationButtonsView(
+                            onPrevious: tappedPrevious,
+                            onNext: tappedNext,
+                            onSubmit: tappedSubmit
+                        )
+                        .padding(.horizontal, AppTheme.Spacing.lg)
+                    }
+                    .padding(.vertical, AppTheme.Spacing.lg)
                 }
                 
                 HamburgerMenuView(isMenuOpen: $isMenuOpen)
             }
-            .navigationTitle("Member KYC Form")
+            .navigationTitle("")
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Member KYC Form")
+                        .font(AppTheme.Typography.headline)
+                        .foregroundColor(AppTheme.Colors.primaryText)
+                }
+            }
         }
     }
     
