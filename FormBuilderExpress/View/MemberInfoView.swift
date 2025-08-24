@@ -21,6 +21,11 @@ struct MemberInfoView: View {
         Section {
             TextField("First Name", text: $viewModel.member.name.first)
                 .focused($focusedField, equals: .firstName)
+                .onChange(of: viewModel.member.name.first) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        viewModel.member.name.first = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
                 .accessibleFormField(
                     label: "First Name",
                     hint: "Enter your first name",
@@ -31,6 +36,11 @@ struct MemberInfoView: View {
                 
             TextField("Middle Name", text: $viewModel.member.name.middle)
                 .focused($focusedField, equals: .middleName)
+                .onChange(of: viewModel.member.name.middle) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        viewModel.member.name.middle = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
                 .accessibleFormField(
                     label: "Middle Name",
                     hint: "Enter your middle name, optional",
@@ -41,6 +51,11 @@ struct MemberInfoView: View {
                 
             TextField("Last Name", text: $viewModel.member.name.last)
                 .focused($focusedField, equals: .lastName)
+                .onChange(of: viewModel.member.name.last) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        viewModel.member.name.last = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
                 .accessibleFormField(
                     label: "Last Name",
                     hint: "Enter your last name",
@@ -71,6 +86,11 @@ struct MemberInfoView: View {
         Section {
             TextField("Email", text: $viewModel.member.email)
                 .focused($focusedField, equals: .email)
+                .onChange(of: viewModel.member.email) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        viewModel.member.email = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
                 .autocapitalization(.none)
                 .keyboardType(.emailAddress)
                 .textContentType(.emailAddress)

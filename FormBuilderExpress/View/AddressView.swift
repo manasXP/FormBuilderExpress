@@ -55,10 +55,35 @@ struct AddressView: View {
     var body: some View {
         Section(header: Text(headerTitle)) {
             TextField("Address Line 1", text: addressBinding.addressLine1)
+                .onChange(of: addressBinding.wrappedValue.addressLine1) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        addressBinding.wrappedValue.addressLine1 = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
             TextField("Address Line 2 (Optional)", text: addressBinding.addressLine2)
+                .onChange(of: addressBinding.wrappedValue.addressLine2) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        addressBinding.wrappedValue.addressLine2 = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
             TextField("City", text: addressBinding.city)
+                .onChange(of: addressBinding.wrappedValue.city) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        addressBinding.wrappedValue.city = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
             TextField("State/Province", text: addressBinding.state)
+                .onChange(of: addressBinding.wrappedValue.state) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        addressBinding.wrappedValue.state = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
             TextField("ZIP/Postal Code", text: addressBinding.zipCode)
+                .onChange(of: addressBinding.wrappedValue.zipCode) { _, newValue in
+                    if newValue.count > 6 {
+                        addressBinding.wrappedValue.zipCode = String(newValue.prefix(6))
+                    }
+                }
             Picker("Select Country", selection: addressBinding.selectedCountry) {
                 ForEach(countries, id: \.self) { country in
                     Text(country)

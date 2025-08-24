@@ -15,8 +15,23 @@ struct NomineeInfoView: View {
     var body: some View {
         Section("Nominee Personal Information") {
             TextField("First Name", text: $viewModel.nominee.name.first)
+                .onChange(of: viewModel.nominee.name.first) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        viewModel.nominee.name.first = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
             TextField("Middle Name", text: $viewModel.nominee.name.middle)
+                .onChange(of: viewModel.nominee.name.middle) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        viewModel.nominee.name.middle = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
             TextField("Last Name", text: $viewModel.nominee.name.last)
+                .onChange(of: viewModel.nominee.name.last) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        viewModel.nominee.name.last = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
             DatePicker(
                 "Birthdate",
                 selection: $viewModel.nominee.birthDate,
@@ -29,6 +44,11 @@ struct NomineeInfoView: View {
                 .autocapitalization(.none)
                 .keyboardType(.emailAddress)
                 .textContentType(.emailAddress)
+                .onChange(of: viewModel.nominee.email) { _, newValue in
+                    if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                        viewModel.nominee.email = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                    }
+                }
                 .padding()
             iPhoneNumberField("(000) 000-0000", text: $viewModel.nominee.phone, isEditing: $isEditing)
                 .flagHidden(false)

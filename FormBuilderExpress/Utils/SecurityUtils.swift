@@ -8,6 +8,12 @@
 import Foundation
 import CryptoKit
 
+// MARK: - Form Validation Constants
+struct FormValidationConstants {
+    static let standardFieldMaxLength = 48
+    static let sanitizedFieldMaxLength = 500 // For security sanitization buffer overflow protection
+}
+
 // MARK: - Input Sanitization
 extension String {
     // Remove potentially dangerous characters and scripts
@@ -32,8 +38,8 @@ extension String {
         cleaned = cleaned.trimmingCharacters(in: .whitespacesAndNewlines)
         
         // Limit length to prevent buffer overflow
-        if cleaned.count > 500 {
-            cleaned = String(cleaned.prefix(500))
+        if cleaned.count > FormValidationConstants.sanitizedFieldMaxLength {
+            cleaned = String(cleaned.prefix(FormValidationConstants.sanitizedFieldMaxLength))
         }
         
         return cleaned
@@ -65,14 +71,14 @@ extension String {
     
     // Validate name (alphabetic characters, spaces, hyphens, apostrophes only)
     var isValidName: Bool {
-        let nameRegex = "^[a-zA-Z\\s\\-']{1,50}$"
+        let nameRegex = "^[a-zA-Z\\s\\-']{1,\(FormValidationConstants.standardFieldMaxLength)}$"
         let namePredicate = NSPredicate(format:"SELF MATCHES %@", nameRegex)
         return namePredicate.evaluate(with: self.sanitized)
     }
     
     // Validate address (alphanumeric, spaces, commas, periods, hyphens)
     var isValidAddress: Bool {
-        let addressRegex = "^[a-zA-Z0-9\\s\\.,\\-#/]{1,100}$"
+        let addressRegex = "^[a-zA-Z0-9\\s\\.,\\-#/]{1,\(FormValidationConstants.standardFieldMaxLength)}$"
         let addressPredicate = NSPredicate(format:"SELF MATCHES %@", addressRegex)
         return addressPredicate.evaluate(with: self.sanitized)
     }
@@ -96,6 +102,48 @@ extension String {
         let accountRegex = "^[0-9]{8,17}$"
         let accountPredicate = NSPredicate(format:"SELF MATCHES %@", accountRegex)
         return accountPredicate.evaluate(with: self.sanitized)
+    }
+    
+    // Validate zip code (6 numeric characters only)
+    var isValidZipCode: Bool {
+        let zipRegex = "^[0-9]{6}$"
+        let zipPredicate = NSPredicate(format:"SELF MATCHES %@", zipRegex)
+        return zipPredicate.evaluate(with: self.sanitized)
+    }
+    
+    // Validate general text field with standard character limit
+    var isValidTextField: Bool {
+        let sanitizedText = self.sanitized
+        return !sanitizedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+               sanitizedText.count <= FormValidationConstants.standardFieldMaxLength
+    }
+    
+    // Validate city field
+    var isValidCity: Bool {
+        let cityRegex = "^[a-zA-Z\\s\\-']{1,\(FormValidationConstants.standardFieldMaxLength)}$"
+        let cityPredicate = NSPredicate(format:"SELF MATCHES %@", cityRegex)
+        return cityPredicate.evaluate(with: self.sanitized)
+    }
+    
+    // Validate state field
+    var isValidState: Bool {
+        let stateRegex = "^[a-zA-Z\\s\\-']{1,\(FormValidationConstants.standardFieldMaxLength)}$"
+        let statePredicate = NSPredicate(format:"SELF MATCHES %@", stateRegex)
+        return statePredicate.evaluate(with: self.sanitized)
+    }
+    
+    // Validate bank name field
+    var isValidBankName: Bool {
+        let bankNameRegex = "^[a-zA-Z0-9\\s\\.,\\-&']{1,\(FormValidationConstants.standardFieldMaxLength)}$"
+        let bankNamePredicate = NSPredicate(format:"SELF MATCHES %@", bankNameRegex)
+        return bankNamePredicate.evaluate(with: self.sanitized)
+    }
+    
+    // Validate account holder name
+    var isValidAccountHolderName: Bool {
+        let accountHolderRegex = "^[a-zA-Z\\s\\-']{1,\(FormValidationConstants.standardFieldMaxLength)}$"
+        let accountHolderPredicate = NSPredicate(format:"SELF MATCHES %@", accountHolderRegex)
+        return accountHolderPredicate.evaluate(with: self.sanitized)
     }
 }
 

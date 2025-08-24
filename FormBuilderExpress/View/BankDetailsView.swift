@@ -20,12 +20,22 @@ struct BankAccountDetailsView: View {
                     TextField("Full Name", text: $viewModel.account.accountHolderName)
                         .textContentType(.name)
                         .autocapitalization(.words)
+                        .onChange(of: viewModel.account.accountHolderName) { _, newValue in
+                            if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                                viewModel.account.accountHolderName = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                            }
+                        }
                 }
                 
                 Section(header: Text("Bank Information")) {
                     TextField("Bank Name", text: $viewModel.account.bankName)
                         .textContentType(.organizationName)
                         .autocapitalization(.words)
+                        .onChange(of: viewModel.account.bankName) { _, newValue in
+                            if newValue.count > FormValidationConstants.standardFieldMaxLength {
+                                viewModel.account.bankName = String(newValue.prefix(FormValidationConstants.standardFieldMaxLength))
+                            }
+                        }
                     
                     TextField("Routing Number", text: $viewModel.account.routingNumber)
                         .keyboardType(.numberPad)
