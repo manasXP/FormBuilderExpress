@@ -31,27 +31,44 @@ struct KYCFormView: View {
                     .blur(radius: 10)
                     .offset(x: 150, y: 100)
                 
-                ScrollView {
-                    VStack(spacing: AppTheme.Spacing.lg) {
+                VStack(spacing: 0) {
+                    // Main content area
+                    ScrollView {
+                        VStack(spacing: AppTheme.Spacing.lg) {
+                            VStack {
+                                KYCFormContentView()
+                            }
+                            .themedCard()
+                            .padding(.horizontal, AppTheme.Spacing.lg)
+                            
+                            KYCNavigationButtonsView(
+                                onPrevious: tappedPrevious,
+                                onNext: tappedNext,
+                                onSubmit: tappedSubmit
+                            )
+                            .padding(.horizontal, AppTheme.Spacing.lg)
+                        }
+                        .padding(.vertical, AppTheme.Spacing.lg)
+                        .padding(.bottom, AppTheme.Spacing.xl) // Extra space for progress bar
+                    }
+                    
+                    // Progress bar at bottom
+                    VStack {
+                        Divider()
+                            .background(AppTheme.Colors.primaryText.opacity(0.2))
+                        
                         KYCProgressIndicatorView(
                             currentStep: viewModel.currentStep,
                             lastAutoSaved: viewModel.lastAutoSaved
                         )
-                        
-                        VStack {
-                            KYCFormContentView()
-                        }
-                        .themedCard()
                         .padding(.horizontal, AppTheme.Spacing.lg)
-                        
-                        KYCNavigationButtonsView(
-                            onPrevious: tappedPrevious,
-                            onNext: tappedNext,
-                            onSubmit: tappedSubmit
-                        )
-                        .padding(.horizontal, AppTheme.Spacing.lg)
+                        .padding(.vertical, AppTheme.Spacing.md)
                     }
-                    .padding(.vertical, AppTheme.Spacing.lg)
+                    .background(AppTheme.Colors.cardBackground)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 0)
+                            .stroke(AppTheme.Colors.primaryText.opacity(0.1), lineWidth: 1)
+                    )
                 }
                 
                 // Menu overlay (only the sliding menu, not the button)

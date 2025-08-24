@@ -38,26 +38,36 @@ struct KYCProgressIndicatorView: View {
     }
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: AppTheme.Spacing.sm) {
+            // Progress bar with themed styling
             ProgressView(value: progressValue, total: 1.0)
-                .progressViewStyle(LinearProgressViewStyle(tint: .blue))
-                .padding(.vertical)
+                .progressViewStyle(LinearProgressViewStyle(tint: AppTheme.Colors.iconBlue))
+                .scaleEffect(y: 2.0) // Make progress bar thicker
+                .animation(.easeInOut(duration: 0.3), value: progressValue)
             
             HStack {
-                Text("Step \(stepNumber) of 6: \(stepTitle)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Step \(stepNumber) of 6")
+                        .font(AppTheme.Typography.caption)
+                        .foregroundColor(AppTheme.Colors.primaryText)
+                        .fontWeight(.semibold)
+                    
+                    Text(stepTitle)
+                        .font(AppTheme.Typography.bodySmall)
+                        .foregroundColor(AppTheme.Colors.secondaryText)
+                }
                 
                 Spacer()
                 
                 if let lastSaved = lastAutoSaved {
-                    HStack(spacing: 4) {
+                    HStack(spacing: AppTheme.Spacing.xs) {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
-                            .font(.caption2)
+                            .foregroundColor(AppTheme.Colors.successColor)
+                            .font(AppTheme.Typography.caption)
+                        
                         Text("Saved \(timeAgoSince(lastSaved))")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
+                            .font(AppTheme.Typography.caption)
+                            .foregroundColor(AppTheme.Colors.secondaryText)
                     }
                 }
             }
