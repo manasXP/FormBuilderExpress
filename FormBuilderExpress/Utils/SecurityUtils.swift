@@ -49,17 +49,37 @@ extension String {
             .replacingOccurrences(of: "'", with: "&#39;")
     }
     
-    // Validate phone number format
+    // Validate phone number format (handles both formatted and unformatted numbers)
     var isValidPhoneNumber: Bool {
-        let sanitizedPhone = self.sanitized
-        print("📞 Phone validation for '\(self)' -> sanitized: '\(sanitizedPhone)'")
+        print("📞 Phone validation for original: '\(self)'")
         
-        let phoneRegex = "^[\\+]?[1-9]?[0-9]{7,15}$"
-        let phonePredicate = NSPredicate(format:"SELF MATCHES %@", phoneRegex)
-        let isValid = phonePredicate.evaluate(with: sanitizedPhone)
+        // Extract only digits from the phone number (ignore formatting)
+        let digitsOnly = self.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+        print("📞 Phone digits only: '\(digitsOnly)'")
         
-        print("📞 Phone validation result: \(isValid)")
-        return isValid
+        // Check if we have exactly 10 digits for US phone numbers
+        guard digitsOnly.count == 10 else {
+            print("📞 Phone validation failed: wrong digit count (\(digitsOnly.count))")
+            return false
+        }
+        
+        // Validate that area code (first 3 digits) doesn't start with 0 or 1
+        guard let firstDigit = digitsOnly.first,
+              firstDigit != "0" && firstDigit != "1" else {
+            print("📞 Phone validation failed: invalid area code")
+            return false
+        }
+        
+        // Validate that exchange code (4th digit) doesn't start with 0 or 1
+        let exchangeIndex = digitsOnly.index(digitsOnly.startIndex, offsetBy: 3)
+        guard let exchangeDigit = digitsOnly[exchangeIndex].wholeNumberValue,
+              exchangeDigit != 0 && exchangeDigit != 1 else {
+            print("📞 Phone validation failed: invalid exchange code")
+            return false
+        }
+        
+        print("📞 Phone validation result: true")
+        return true
     }
     
     // Validate email format
