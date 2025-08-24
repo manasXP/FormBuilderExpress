@@ -62,12 +62,27 @@ final class KYCFormViewModel: ObservableObject {
         $member
             .map { [weak self] member in
                 guard let self = self else { return false }
-                return member.name.first.isValidName &&
-                member.name.last.isValidName &&
-                (member.name.middle.isEmpty || member.name.middle.isValidName) &&
-                member.email.isValidEmail &&
-                member.phone.isValidPhoneNumber &&
-                self.isValidAge(member.birthDate)
+                
+                let firstNameValid = member.name.first.isValidName
+                let lastNameValid = member.name.last.isValidName
+                let middleNameValid = (member.name.middle.isEmpty || member.name.middle.isValidName)
+                let emailValid = member.email.isValidEmail
+                let phoneValid = member.phone.isValidPhoneNumber
+                let ageValid = self.isValidAge(member.birthDate)
+                
+                // Debug logging
+                print("🔍 Member Info Validation:")
+                print("  First Name (\(member.name.first)): \(firstNameValid)")
+                print("  Last Name (\(member.name.last)): \(lastNameValid)")
+                print("  Middle Name (\(member.name.middle)): \(middleNameValid)")
+                print("  Email (\(member.email)): \(emailValid)")
+                print("  Phone (\(member.phone)): \(phoneValid)")
+                print("  Age (\(self.getAge(from: member.birthDate))): \(ageValid)")
+                
+                let isValid = firstNameValid && lastNameValid && middleNameValid && emailValid && phoneValid && ageValid
+                print("  Overall Valid: \(isValid)")
+                
+                return isValid
             }
             .assign(to: &$isMemberInfoValid)
         
@@ -120,14 +135,28 @@ final class KYCFormViewModel: ObservableObject {
     
     // MARK: - Navigation Methods
     func canProceedToNext() -> Bool {
+        let canProceed: Bool
         switch currentStep {
-        case .memberInfo: return isMemberInfoValid
-        case .memberAddress: return isMemberAddressValid
-        case .nomineeInfo: return isNomineeInfoValid
-        case .nomineeAddress: return isNomineeAddressValid
-        case .memberBankDetails: return isAccountValid
-        case .summary: return true
+        case .memberInfo: 
+            canProceed = isMemberInfoValid
+            print("🚀 canProceedToNext - MemberInfo: \(canProceed)")
+        case .memberAddress: 
+            canProceed = isMemberAddressValid
+            print("🚀 canProceedToNext - MemberAddress: \(canProceed)")
+        case .nomineeInfo: 
+            canProceed = isNomineeInfoValid
+            print("🚀 canProceedToNext - NomineeInfo: \(canProceed)")
+        case .nomineeAddress: 
+            canProceed = isNomineeAddressValid
+            print("🚀 canProceedToNext - NomineeAddress: \(canProceed)")
+        case .memberBankDetails: 
+            canProceed = isAccountValid
+            print("🚀 canProceedToNext - BankDetails: \(canProceed)")
+        case .summary: 
+            canProceed = true
+            print("🚀 canProceedToNext - Summary: \(canProceed)")
         }
+        return canProceed
     }
     
     func submitForm() async {

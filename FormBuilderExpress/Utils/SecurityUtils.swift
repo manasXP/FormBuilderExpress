@@ -51,9 +51,15 @@ extension String {
     
     // Validate phone number format
     var isValidPhoneNumber: Bool {
+        let sanitizedPhone = self.sanitized
+        print("📞 Phone validation for '\(self)' -> sanitized: '\(sanitizedPhone)'")
+        
         let phoneRegex = "^[\\+]?[1-9]?[0-9]{7,15}$"
         let phonePredicate = NSPredicate(format:"SELF MATCHES %@", phoneRegex)
-        return phonePredicate.evaluate(with: self.sanitized)
+        let isValid = phonePredicate.evaluate(with: sanitizedPhone)
+        
+        print("📞 Phone validation result: \(isValid)")
+        return isValid
     }
     
     // Validate email format
