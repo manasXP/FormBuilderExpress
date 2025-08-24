@@ -10,6 +10,15 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
 
+// MARK: - Form Validation Constants
+struct FormValidationConstants {
+    static let standardFieldMaxLength = 48
+    static let sanitizedFieldMaxLength = 500 // For security sanitization buffer overflow protection
+    static let minimumAge = 18 // Minimum age requirement for both member and nominee
+}
+
+
+
 final class KYCFormViewModel: ObservableObject {
     private let db = Firestore.firestore()
     private var autoSaveTimer: Timer?
@@ -51,12 +60,14 @@ final class KYCFormViewModel: ObservableObject {
     private func setupValidation() {
         // Member info validation
         $member
-            .map { member in
-                member.name.first.isValidName &&
+            .map { [weak self] member in
+                guard let self = self else { return false }
+                return member.name.first.isValidName &&
                 member.name.last.isValidName &&
                 (member.name.middle.isEmpty || member.name.middle.isValidName) &&
                 member.email.isValidEmail &&
-                member.phone.isValidPhoneNumber
+                member.phone.isValidPhoneNumber &&
+                self.isValidAge(member.birthDate)
             }
             .assign(to: &$isMemberInfoValid)
         
@@ -73,12 +84,14 @@ final class KYCFormViewModel: ObservableObject {
         
         // Nominee info validation
         $nominee
-            .map { nominee in
-                nominee.name.first.isValidName &&
+            .map { [weak self] nominee in
+                guard let self = self else { return false }
+                return nominee.name.first.isValidName &&
                 nominee.name.last.isValidName &&
                 (nominee.name.middle.isEmpty || nominee.name.middle.isValidName) &&
                 nominee.email.isValidEmail &&
-                nominee.phone.isValidPhoneNumber
+                nominee.phone.isValidPhoneNumber &&
+                self.isValidAge(nominee.birthDate)
             }
             .assign(to: &$isNomineeInfoValid)
         
@@ -241,6 +254,29 @@ final class KYCFormViewModel: ObservableObject {
     
     // MARK: - Validation Helpers
     // Validation methods moved to SecurityUtils.swift for consistency
+    
+    // MARK: - Age Validation
+    func isValidAge(_ birthDate: Date) -> Bool {
+        let calendar = Calendar.current
+        let now = Date()
+        let ageComponents = calendar.dateComponents([.year], from: birthDate, to: now)
+        return (ageComponents.year ?? 0) >= FormValidationConstants.minimumAge
+    }
+    
+    func getAge(from birthDate: Date) -> Int {
+        let calendar = Calendar.current
+        let now = Date()
+        let ageComponents = calendar.dateComponents([.year], from: birthDate, to: now)
+        return ageComponents.year ?? 0
+    }
+    
+    func ageValidationMessage(for birthDate: Date, personType: String) -> String? {
+        let age = getAge(from: birthDate)
+        if age < FormValidationConstants.minimumAge {
+            return "\(personType) must be at least \(FormValidationConstants.minimumAge) years old. Current age: \(age)"
+        }
+        return nil
+    }
     
     // MARK: - Auto-Save Functionality
     private func setupAutoSave() {

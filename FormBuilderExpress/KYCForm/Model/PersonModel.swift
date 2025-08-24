@@ -13,7 +13,7 @@ struct Person: Codable {
     var name: Name = Name(first: "", middle: "", last: "")
     var email: String = ""
     var phone: String = ""
-    var birthDate = Date()
+    var birthDate = Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date() // Default to 25 years ago
     var address = Address()
 }
 

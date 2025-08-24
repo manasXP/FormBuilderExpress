@@ -67,12 +67,37 @@ struct MemberInfoView: View {
             DatePicker(
                 "Birthdate",
                 selection: $viewModel.member.birthDate,
+                in: ...Date(),
                 displayedComponents: [.date]
             )
             .accessibilityLabel("Date of Birth")
             .accessibilityHint("Select your date of birth")
             .scaledFont(.body, maxSize: 24)
             .highContrastAdaptive()
+            
+            // Age validation message
+            if let ageMessage = viewModel.ageValidationMessage(for: viewModel.member.birthDate, personType: "Member") {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.red)
+                    Text(ageMessage)
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }
+                .padding(.top, 4)
+            } else {
+                let age = viewModel.getAge(from: viewModel.member.birthDate)
+                if age >= FormValidationConstants.minimumAge {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text("Age: \(age) years (valid)")
+                            .foregroundColor(.green)
+                            .font(.caption)
+                    }
+                    .padding(.top, 4)
+                }
+            }
         } header: {
             Text("Personal Information")
                 .scaledFont(.headline, maxSize: 28)
@@ -147,4 +172,5 @@ struct MemberInfoView: View {
     Form {
         MemberInfoView()
     }
+    .environmentObject(KYCFormViewModel())
 }

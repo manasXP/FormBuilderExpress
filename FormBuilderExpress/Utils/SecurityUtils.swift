@@ -8,12 +8,6 @@
 import Foundation
 import CryptoKit
 
-// MARK: - Form Validation Constants
-struct FormValidationConstants {
-    static let standardFieldMaxLength = 48
-    static let sanitizedFieldMaxLength = 500 // For security sanitization buffer overflow protection
-}
-
 // MARK: - Input Sanitization
 extension String {
     // Remove potentially dangerous characters and scripts

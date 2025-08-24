@@ -54,30 +54,9 @@
 		267118A42E1B5602006259FE /* FormBuilderExpressUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FormBuilderExpressUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		267118D22E1EB5D7006259FE /* Exceptions for "FormBuilderExpress" folder in "FormBuilderExpressTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"GoogleService-Info.plist",
-			);
-			target = 267118992E1B5602006259FE /* FormBuilderExpressTests */;
-		};
-		267118D32E1EB5D7006259FE /* Exceptions for "FormBuilderExpress" folder in "FormBuilderExpressUITests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"GoogleService-Info.plist",
-			);
-			target = 267118A32E1B5602006259FE /* FormBuilderExpressUITests */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		2671188F2E1B5601006259FE /* FormBuilderExpress */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				267118D22E1EB5D7006259FE /* Exceptions for "FormBuilderExpress" folder in "FormBuilderExpressTests" target */,
-				267118D32E1EB5D7006259FE /* Exceptions for "FormBuilderExpress" folder in "FormBuilderExpressUITests" target */,
-			);
 			path = FormBuilderExpress;
 			sourceTree = "<group>";
 		};

@@ -28,12 +28,19 @@ struct FormBuilderExpressApp: App {
     
     @StateObject var kycViewModel = KYCFormViewModel()
     @StateObject var authViewModel = AuthViewModel()
+    @State private var showSplashScreen = true
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(kycViewModel)
-                .environmentObject(authViewModel)
+            if showSplashScreen {
+                SplashScreenView(showSplashScreen: $showSplashScreen)
+                    .environmentObject(kycViewModel)
+                    .environmentObject(authViewModel)
+            } else {
+                ContentView()
+                    .environmentObject(kycViewModel)
+                    .environmentObject(authViewModel)
+            }
         }
     }
 }

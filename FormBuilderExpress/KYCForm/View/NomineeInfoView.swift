@@ -35,8 +35,33 @@ struct NomineeInfoView: View {
             DatePicker(
                 "Birthdate",
                 selection: $viewModel.nominee.birthDate,
+                in: ...Date(),
                 displayedComponents: [.date]
             )
+            
+            // Age validation message
+            if let ageMessage = viewModel.ageValidationMessage(for: viewModel.nominee.birthDate, personType: "Nominee") {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.red)
+                    Text(ageMessage)
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }
+                .padding(.top, 4)
+            } else {
+                let age = viewModel.getAge(from: viewModel.nominee.birthDate)
+                if age >= FormValidationConstants.minimumAge {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text("Age: \(age) years (valid)")
+                            .foregroundColor(.green)
+                            .font(.caption)
+                    }
+                    .padding(.top, 4)
+                }
+            }
         }
         
         Section("Nominee Contact Information") {
@@ -83,4 +108,5 @@ struct NomineeInfoView: View {
     Form {
         NomineeInfoView()
     }
+    .environmentObject(KYCFormViewModel())
 }
